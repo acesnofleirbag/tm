@@ -8,6 +8,17 @@ import (
 	"tm/guard"
 )
 
+func capitalize(str string) string {
+	if len(str) == 0 {
+		return str
+	}
+
+	first := strings.ToUpper(string(str[0]))
+	rest := strings.ToLower(str[1:])
+
+	return first + rest
+}
+
 type CopyRunner struct {
 	Replace bool
 	Name    string
@@ -18,6 +29,8 @@ func (self *CopyRunner) CpFile(srcPath string, dstPath string) {
 	defer src.Close()
 	guard.Err(err)
 
+	dstPath = strings.ReplaceAll(string(dstPath), "<:A:>", self.Name)
+	dstPath = strings.ReplaceAll(string(dstPath), "<:AFU:>", capitalize(self.Name))
 	dst, err := os.Create(dstPath)
 	guard.Err(err)
 
@@ -25,7 +38,8 @@ func (self *CopyRunner) CpFile(srcPath string, dstPath string) {
 		data, err := io.ReadAll(src)
 		guard.Err(err)
 
-		content := strings.ReplaceAll(string(data), "<:AGGREGATE:>", self.Name)
+		content := strings.ReplaceAll(string(data), "<:A:>", self.Name)
+		content = strings.ReplaceAll(string(content), "<:AFU:>", capitalize(self.Name))
 		reader := strings.NewReader(content)
 
 		_, err = io.Copy(dst, reader)

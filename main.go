@@ -71,7 +71,7 @@ func main() {
 		}
 
 		break
-    default:
+	default:
 		fmt.Println("Usage:")
 		fmt.Println()
 		fmt.Println("tm init <path>")

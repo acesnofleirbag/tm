@@ -36,6 +36,7 @@ func checkArgsSize(args []string, size int) {
 
 func main() {
 	args := os.Args
+    checkArgsSize(args, 2)
 	cmd := args[1]
 
 	home := os.Getenv("HOME")
